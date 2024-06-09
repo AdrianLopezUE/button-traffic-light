@@ -9,17 +9,12 @@
 
 .global main
 main:
-  ldi r16, _BV(PCIE0)
+  ldi r16, _BV(PCIE2)
   sts PCICR, r16
 
-  ldi r16, _BV(PCINT0)
-  sts PCMSK0, r16
-
-  ldi r16, 0b00111110
-  out _SFR_IO_ADDR(DDRB), r16
-  ldi r16, 0b11000001
-  out _SFR_IO_ADDR(PORTB), r16
-
+  ldi r16, _BV(PCINT23)
+  sts PCMSK2, r16
+  
   sei
   ldi r16, _BV(SM1) | _BV(SE)
   out _SFR_IO_ADDR(SMCR), r16
@@ -33,14 +28,14 @@ main:
     rjmp loop
 
 
-.global PCINT0_vect
-PCINT0_vect:
+.global PCINT2_vect
+PCINT2_vect:
   nop
-  sbis _SFR_IO_ADDR(PINB), PB0
-  rjmp button_pressed
+  sbis _SFR_IO_ADDR(PIND), PD7
+  rjmp cambioLuz
   reti
 
-button_pressed:
+cambioLuz:
     ; Configure leds to warn cars
     ldi r16, 0b00010100
     out _SFR_IO_ADDR(PORTB), r16 
